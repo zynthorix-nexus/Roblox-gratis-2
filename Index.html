@@ -18,9 +18,36 @@
             font-family: 'Arial', sans-serif;
         }
 
+        /* === PORTADA DE ROBLOX === */
+        #portada {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            background: #F5F5F5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            transition: opacity 0.5s ease;
+        }
+
+        .logo-roblox {
+            font-family: 'Arial Black', 'Helvetica Neue', Helvetica, sans-serif;
+            font-size: 80px;
+            font-weight: 900;
+            letter-spacing: -2px;
+            color: #000000;
+        }
+
+        .letra-o {
+            transform: rotate(12deg);
+            display: inline-block;
+        }
+
         /* === PANTALLA DE CREAR CUENTA === */
         #pantalla-crear-cuenta {
-            display: flex;
+            display: none;
             width: 100%;
             height: 100%;
             background: #121212;
@@ -715,6 +742,9 @@
         }
 
         @media (max-width: 600px) {
+            .logo-roblox {
+                font-size: 50px;
+            }
             .logo-pequeño {
                 font-size: 20px;
             }
@@ -732,6 +762,13 @@
     </style>
 </head>
 <body>
+
+    <!-- PORTADA QUE DURA 1 SEGUNDO -->
+    <div id="portada">
+        <div class="logo-roblox">
+            R<span class="letra-o">O</span>BLOX
+        </div>
+    </div>
 
     <!-- PANTALLA DE CREAR CUENTA -->
     <div id="pantalla-crear-cuenta">
@@ -763,25 +800,4 @@
                             <option value="">Día</option>
                         </select>
                     </div>
-                    <div class="columna">
-                        <select class="selector" id="select-anio">
-                            <option value="">Año</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-
-            <div>
-                <label class="etiqueta">Nombre de usuario</label>
-                <input type="text" class="entrada" id="usuario" placeholder="Elige un nombre de usuario">
-            </div>
-
-            <div>
-                <label class="etiqueta">Contraseña</label>
-                <input type="password" class="entrada" id="contrasena" placeholder="Crea una contraseña">
-            </div>
-
-            <div class="contenedor-terminos">
-                <input type="checkbox" class="checkbox" id="terminos">
-                <label class="texto-terminos">
-                    Acepto los <a href="#" class="enlace">Términos de uso</a> y la <a href="#" class="enlace">Política de p
+        
