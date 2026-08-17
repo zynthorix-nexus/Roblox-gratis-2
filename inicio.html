@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roblox</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Arial', sans-serif;
+        }
+
+        /* === PANTALLA DE CREAR CUENTA === */
+        #pantalla-crear-cuenta {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            background: #121212;
+            color: white;
+            flex-direction: column;
+            padding: 20px;
+            padding-bottom: 40px;
+            overflow-y: auto;
+        }
+
+        .titulo-pagina {
+            font-size: 28px;
+            font-weight: bold;
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .formulario {
+            max-width: 400px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .etiqueta {
+            font-size: 15px;
+            color: #e0e0e0;
+            margin-bottom: 4px;
+        }
+
+        .entrada {
+            width: 100%;
+            padding: 12px 14px;
+            font-size: 16px;
+            background: #1f1f1f;
+            border: 2px solid #333;
+            color: white;
+            border-radius: 6px;
+            outline: none;
+            transition: border 0.2s;
+        }
+
+        .entrada:focus {
+            border-color: #00a2ff;
+        }
+
+        .fila-doble {
+            display: flex;
+            gap: 12px;
+        }
+
+        .fila-triple {
+            display: flex;
+            gap: 12px;
+        }
+
+        .columna {
+            flex: 1;
+        }
+
+        .selector {
+            width: 100%;
+            padding: 12px 14px;
+            font-size: 16px;
+            background: #1f1f1f;
+            border: 2px solid #333;
+            color: white;
+            border-radius: 6px;
+            outline: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            background-size: 18px;
+        }
+
+        .contenedor-terminos {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .checkbox {
+            width: 20px;
+            height: 20px;
+            margin-top: 2px;
+            accent-color: #00a2ff;
+        }
+
+        .texto-terminos {
+            font-size: 13px;
+            color: #b0b0b0;
+            line-height: 1.5;
+        }
+
+        .enlace {
+            color: #00a2ff;
+            text-decoration: none;
+        }
+
+        .boton-crear {
+            width: 100%;
+            padding: 14px;
+            font-size: 18px;
+            font-weight: bold;
+            background: #00a2ff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background 0.2s;
+        }
+
+        .boton-crear:hover {
+            background: #008fde;
+        }
+
+        .boton-crear:active {
+            transform: scale(0.98);
+        }
+
+        .mensaje-error {
+            color: #ff6b6b;
+            font-size: 14px;
+            text-align: center;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .texto-iniciar-sesion {
+            text-align: center;
+            margin-top: 24px;
+            font-size: 15px;
+            color: #b0b0b0;
+        }
+
+        /* === PANTALLA PRINCIPAL === */
+        #pantalla-principal {
+            display: none;
+            width: 100%;
+            height: 100%;
+            background: #121212;
+            color: white;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .barra-superior {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+        }
+
+        .menu-icono {
+            font-size: 24px;
+        }
+
+        .logo-pequeño {
+            font-family: 'Arial Black', sans-serif;
+            font-size: 28px;
+            font-weight: 900;
+            color: white;
+        }
+
+        .logo-pequeño .o-girada {
+            display: inline-block;
+            transform: rotate(12deg);
+        }
+
+        .iconos-derecha {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            font-size: 22px;
+        }
+
+        .icono-configuracion {
+            display: none !important;
+        }
+
+        .perfil-usuario {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+        }
+
+        .avatar-usuario {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: #00a2ff;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid #000;
+        }
+
+        .avatar-usuario::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 16px;
+            height: 18px;
+            background: #ffeb3b;
+            border: 2px solid #000;
+            border-radius: 2px;
+        }
+
+        .avatar-usuario::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 12px;
+            height: 10px;
+            margin-top: 2px;
+            background: transparent;
+            border-radius: 0 0 50% 50%;
+            border-bottom: 2px solid #000;
+        }
+
+        .ojo-izq, .ojo-der {
+            position: absolute;
+            width: 2px;
+            height: 6px;
+            background: #000;
+            border-radius: 1px;
+        }
+
+        .ojo-izq {
+            top: 7px;
+            left: 7px;
+        }
+
+        .ojo-der {
+            top: 7px;
+            right: 7px;
+        }
+
+        .nombre-usuario {
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .etiqueta-verificar {
+            font-size: 11px;
+            color: #999;
+            background: #2a2a2a;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+
+        /* === SECCIÓN DE AMIGOS === */
+        .seccion-amigos {
+            padding: 20px 16px;
+        }
+
+        .titulo-seccion {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 16px;
+        }
+
+        .buscar-amigo {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .entrada-buscar {
+            flex: 1;
+            padding: 12px 14px;
+            font-size: 16px;
+            background: #1f1f1f;
+            border: 2px solid #333;
+            color: white;
+            border-radius: 6px;
+            outline: none;
+        }
+
+        .entrada-buscar:focus {
+            border-color: #00a2ff;
+        }
+
+        .boton-buscar {
+            padding: 12px 18px;
+            background: #00a2ff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .boton-buscar:hover {
+            background: #008fde;
+        }
+
+        .resultado-busqueda {
+            background: #1f1f1f;
+            border-radius: 8px;
+            padding: 14px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .jugador-encontrado {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .info-jugador {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .avatar-chico {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #ff9800;
+            border: 2px solid #000;
+        }
+
+        .nombre-jugador {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .boton-agregar {
+            padding: 8px 16px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .boton-agregar:hover {
+            background: #218838;
+        }
+
+        .boton-agregar:disabled {
+            background: #555;
+            cursor: not-allowed;
+        }
+
+        .lista-amigos {
+            margin-top: 10px;
+        }
+
+        .amigo-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #1f1f1f;
+            border-radius: 8px;
+            padding: 12px 14px;
+            margin-bottom: 8px;
+        }
+
+        .sin-amigos {
+            color: #888;
+            font-size: 15px;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .mensaje-exito {
+            color: #28a745;
+            font-size: 14px;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .mensaje-no-encontrado {
+            color: #ff6b6b;
+            font-size: 14px;
+            margin-top: 10px;
+            display: none;
+        }
+
+        /* === BOTÓN JUEGOS === */
+        .contenedor-boton-juegos {
+            padding: 0 16px 20px;
+        }
+
+        .boton-juegos {
+            width: 90px;
+            height: 75px;
+            background: #1f1f1f;
+            border: 3px solid #444;
+            border-radius: 8px;
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .boton-juegos:hover {
+            border-color: #00a2ff;
+            background: #2a2a2a;
+        }
+
+        /* === CUADRO DE JUEGOS === */
+        .seccion-juegos {
+            padding: 0 16px 20px;
+            display: none;
+        }
+
+        .cuadro-juegos {
+            background: #1f1f1f;
+            border: 2px solid #333;
+            border-radius: 8px;
+            padding: 15px;
+            width: 280px;
+            min-height: 150px;
+            position: relative;
+        }
+
+        .boton-cerrar {
+            position: absolute;
+            top: 8px;
+            right: 10px;
+            background: transparent;
+            border: none;
+            color: #888;
+            font-size: 22px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .boton-cerrar:hover {
+            color: #fff;
+        }
+
+        .titulo-cuadro {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            padding-right: 25px;
+        }
+
+        .sin-juegos {
+            color: #888;
+            font-size: 15px;
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .boton-crear-juego {
+            width: 100%;
+            padding: 12px;
+            background: #00a2ff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background 0.2s;
+        }
+
+        .boton-crear-juego:hover {
+            background: #008fde;
+        }
+
+        /* === EDITOR DE JUEGOS === */
+        #editor-juegos {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            background: #1a1a1a;
+            z-index: 200;
+            display: none;
+            flex-direction: column;
+        }
+
+        .barra-superior-editor {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 16px;
+            background: #2a2a2a;
+            border-bottom: 2px solid #333;
+        }
+
+        .boton-volver {
+            background: #444;
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .boton-volver:hover {
+            background: #555;
+        }
+
+        .nombre-editor {
+            font-size: 20px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .boton-guardar {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .boton-guardar:hover {
+            background: #218838;
+        }
+
+        .contenedor-editor {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .barra-herramientas {
+            width: 220px;
+            background: #252525;
+            border-right: 2px solid #333;
+            padding: 15px;
+            overflow-y: auto;
+        }
+
+        .titulo-herramientas {
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #333;
+        }
+
+        .categoria {
+            margin-bottom: 18px;
+        }
+
+        .titulo-categoria {
+            font-size: 14px;
+            color: #aaa;
+            margin-bottom: 8px;
+        }
+
+        .lista-objetos {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+
+        .objeto-bloque {
+            width: 100%;
+            aspect-ratio: 1;
+            background: #333;
+            border: 2px solid #444;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            transition: all 0.2s;
+        }
+
+        .objeto-bloque:hover {
+            border-color: #00a2ff;
+            background: #3a3a3a;
+        }
+
+        .objeto-bloque.seleccionado {
+            border-color: #00a2ff;
+            background: #2a4a6a;
+        }
+
+        .lienzo-mapa {
+            flex: 1;
+            background: #87CEEB;
+            position: relative;
+            overflow: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cuadricula-mapa {
+            width: 800px;
+            height: 600px;
+            background: #71b871;
+            background-image: linear-gradient(rgba(0,0,0,0.08) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(0,0,0,0.08) 1px, transparent 1px);
+            background-size: 40px 40px;
+            position: relative;
+            box-shadow: inset 0 0 80px rgba(0,0,0,0.2);
+        }
+
+        .elemento-colocado {
+            position: absolute;
+            cursor: move;
+            transition: box-shadow 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .elemento-colocado:hover {
+            box-shadow: 0 0 0 2px #00a2ff;
+        }
+
+        .boton-eliminar {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            width: 20px;
+            height: 20px;
+            background: #ff4444;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .elemento-colocado:hover .boton-eliminar {
+            opacity: 1;
+        }
+
+        .entrada-nombre-juego {
+            width: 200px;
+            padding: 8px 12px;
+            background: #1f1f1f;
+            border: 2px solid #333;
+            color: white;
+            border-radius: 4px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .entrada-nombre-juego:focus {
+            border-color: #00a2ff;
+        }
+
+        @media (max-width: 900px) {
+            .contenedor-editor {
+                flex-direction: column;
+            }
+            .barra-herramientas {
+                width: 100%;
+                max-height: 200px;
+            }
+            .cuadricula-mapa {
+                width: 600px;
+                height: 450px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .logo-pequeño {
+                font-size: 20px;
+            }
+            .fila-triple, .fila-doble {
+                flex-direction: column;
+            }
+            .cuadro-juegos {
+                width: 100%;
+            }
+            .cuadricula-mapa {
+                width: 400px;
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- PANTALLA DE CREAR CUENTA -->
+    <div id="pantalla-crear-cuenta">
+        <h1 class="titulo-pagina">Crear cuenta</h1>
+
+        <form class="formulario" id="form-cuenta">
+            <div>
+                <label class="etiqueta">Fecha de nacimiento</label>
+                <div class="fila-triple">
+                    <div class="columna">
+                        <select class="selector" id="select-mes">
+                            <option value="">Mes</option>
+                            <option value="1">Enero</option>
+                            <option value="2">Febrero</option>
+                            <option value="3">Marzo</option>
+                            <option value="4">Abril</option>
+                            <option value="5">Mayo</option>
+                            <option value="6">Junio</option>
+                            <option value="7">Julio</option>
+                            <option value="8">Agosto</option>
+                            <option value="9">Septiembre</option>
+                            <option value="10">Octubre</option>
+                            <option value="11">Noviembre</option>
+                            <option value="12">Diciembre</option>
+                        </select>
+                    </div>
+                    <div class="columna">
+                        <select class="selector" id="select-dia">
+                            <option value="">Día</option>
+                        </select>
+                    </div>
+                    <div class="columna">
+                        <select class="selector" id="select-anio">
+                            <option value="">Año</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <label class="etiqueta">Nombre de usuario</label>
+                <input type="text" class="entrada" id="usuario" placeholder="Elige un nombre de usuario">
+            </div>
+
+            <div>
+                <label class="etiqueta">Contraseña</label>
+                <input type="password" class="entrada" id="contrasena" placeholder="Crea una contraseña">
+            </div>
+
+            <div class="contenedor-terminos">
+                <input type="checkbox" class="checkbox" id="terminos">
+                <label class="texto-terminos">
+                    Acepto los <a href="#" class="enlace">Términos de uso</a> y la <a href="#" class="enlace">Política de p
